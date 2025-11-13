@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ${frontend_image}
+          image: ${frontend_nodeport}
           ports:
             - containerPort: 8080
               hostPort: ${var.ports[var.env].frontend_nodeport}
