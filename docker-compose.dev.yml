@@ -1,0 +1,52 @@
+networks:
+  devops_net:
+    driver: bridge
+
+volumes:
+  pgdata:
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init-multiple-dbs.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 10
+    ports:
+      - "5432:5432"
+    networks:
+      - devops_net
+
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/backend
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - devops_net
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    networks:
+      - devops_net
