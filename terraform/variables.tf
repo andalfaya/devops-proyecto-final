@@ -21,19 +21,23 @@ variable "ports" {
   type = map(object({
     backend_nodeport  = number
     frontend_nodeport = number
+    nodeexporter_nodeport = number
   }))
   default = {
     dev = {
       backend_nodeport  = 8001
       frontend_nodeport = 8081
+      nodeexporter_nodeport = 8091
     }
     stg = {
       backend_nodeport  = 8101
       frontend_nodeport = 8181
+      nodeexporter_nodeport = 8191
     }
     prod = {
       backend_nodeport  = 8201
       frontend_nodeport = 8281
+      nodeexporter_nodeport = 8291
     }
   }
 }

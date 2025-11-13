@@ -39,3 +39,16 @@ resource "kubernetes_manifest" "postgres_service" {
     env = var.env
   }))
 }
+
+resource "kubernetes_manifest" "node_exporter_deployment" {
+  manifest = yamldecode(templatefile("${path.module}/../k8s/node-exporter-deployment.yaml", {
+    env = var.env
+  }))
+}
+
+resource "kubernetes_manifest" "node_exporter_service" {
+  manifest = yamldecode(templatefile("${path.module}/../k8s/node-exporter-service.yaml", {
+    env                   = var.env,
+    nodeexporter_nodeport = var.ports[var.env].nodeexporter_nodeport
+  }))
+}
