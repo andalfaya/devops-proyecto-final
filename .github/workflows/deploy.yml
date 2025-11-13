@@ -75,11 +75,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
-      - name: Install Node.js
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y nodejs npm
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
