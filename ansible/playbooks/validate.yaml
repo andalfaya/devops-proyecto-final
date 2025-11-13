@@ -1,0 +1,17 @@
+- hosts: localhost
+  tasks:
+    - name: Check backend health
+      command: curl -s {{ backend_url }}
+      register: backend_health
+
+    - name: Show backend response
+      debug:
+        var: backend_health.stdout
+
+    - name: Check frontend health
+      command: curl -s {{ frontend_url }}
+      register: frontend_health
+
+    - name: Show frontend response
+      debug:
+        var: frontend_health.stdout

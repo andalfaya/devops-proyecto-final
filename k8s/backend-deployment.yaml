@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: ${env}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: ${backend_image}
+          ports:
+            - containerPort: 8000
+              hostPort: ${backend_nodeport}
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://myuser:mypassword@postgres.${env}.svc.cluster.local:5432/mydb"

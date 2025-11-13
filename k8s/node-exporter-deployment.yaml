@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-exporter
+  namespace: ${env}
+  labels:
+    app: node-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+    spec:
+      containers:
+        - name: node-exporter
+          image: prom/node-exporter:latest
+          args:
+            - --web.listen-address=0.0.0.0:9100
+            - --path.rootfs=/host
+          env:
+            - name: EXPORTER_PORT
+              value: 9100
+          ports:
+            - name: metrics
+              containerPort: 9100
+          volumeMounts:
+            - name: rootfs
+              mountPath: /host
+              readOnly: true
+      volumes:
+        - name: rootfs
+          hostPath:
+            path: /

@@ -1,0 +1,170 @@
+name: Deployment Workflow
+
+on:
+  push:
+    branches:
+      - dev
+      - stg
+      - prod
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  NAMESPACE: ${{ github.repository_owner }}
+  ENVIRONMENT: ${{ github.ref_name }}
+  # Si la rama es prod => latest, si no => nombre de la rama
+  IMAGE_TAG: ${{ github.ref_name == 'prod' && 'latest' || github.ref_name }}
+  IMAGE_BACKEND: ghcr.io/${{ github.repository_owner }}/backend
+  IMAGE_FRONTEND: ghcr.io/${{ github.repository_owner }}/frontend
+
+jobs:
+  build-and-push:
+    name: Build & Push Images
+    runs-on: ubuntu-latest
+    outputs:
+      backend_image: ${{ env.IMAGE_BACKEND }}:${{ env.IMAGE_TAG }}
+      frontend_image: ${{ env.IMAGE_FRONTEND }}:${{ env.IMAGE_TAG }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend
+        run: |
+          docker build -t $IMAGE_BACKEND:$IMAGE_TAG ./backend
+          docker push $IMAGE_BACKEND:$IMAGE_TAG
+
+      - name: Build and push frontend
+        run: |
+          docker build -t $IMAGE_FRONTEND:$IMAGE_TAG ./frontend
+          docker push $IMAGE_FRONTEND:$IMAGE_TAG
+
+  check-minikube:
+    runs-on: self-hosted
+    needs: build-and-push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Minikube status
+        run: |
+          if ! minikube status | grep -q "Running"; then
+            echo "Minikube no está corriendo. Relanzandolo..."
+            minikube start --driver=docker --cpus=2 --memory=2048 --extra-config=apiserver.service-node-port-range=8000-9000
+          else
+            echo "Minikube está activo"
+          fi
+
+  terraform:
+    runs-on: self-hosted
+    needs: check-minikube
+    outputs:
+      backend_url: ${{ steps.export.outputs.backend_url }}
+      frontend_url: ${{ steps.export.outputs.frontend_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        
+      - name: Terraform Init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform Import existing resources
+        run: |
+          # Importar el namespace
+          terraform -chdir=terraform import \
+            -var="env=${ENVIRONMENT}" \
+            -var="backend_image=${IMAGE_BACKEND}:${IMAGE_TAG}" \
+            -var="frontend_image=${IMAGE_FRONTEND}:${IMAGE_TAG}" \
+            kubernetes_namespace.ns ${ENVIRONMENT} || true
+
+      - name: Terraform Destroy
+        run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"
+
+      - name: Terraform Plan
+        run: |
+          terraform -chdir=terraform plan \
+            -var="env=${ENVIRONMENT}" \
+            -var="backend_image=${IMAGE_BACKEND}:${IMAGE_TAG}" \
+            -var="frontend_image=${IMAGE_FRONTEND}:${IMAGE_TAG}"
+
+      - name: Terraform Apply
+        run: |
+          terraform -chdir=terraform apply -auto-approve \
+            -var="env=${ENVIRONMENT}" \
+            -var="backend_image=${IMAGE_BACKEND}:${IMAGE_TAG}" \
+            -var="frontend_image=${IMAGE_FRONTEND}:${IMAGE_TAG}"
+
+      - name: Get Terraform outputs and compose URLs
+        id: export
+        run: |
+          BACKEND_PORT=$(terraform -chdir=terraform output -raw backend_port 2>&1 | grep -Eo '^[0-9]+' | head -n1)
+          FRONTEND_PORT=$(terraform -chdir=terraform output -raw frontend_port 2>&1 | grep -Eo '^[0-9]+' | head -n1)
+          NODE_IP=$(minikube ip)
+
+          BACKEND_URL="http://${NODE_IP}:${BACKEND_PORT}/health"
+          FRONTEND_URL="http://${NODE_IP}:${FRONTEND_PORT}/health"
+
+          echo "Backend URL: $BACKEND_URL"
+          echo "Frontend URL: $FRONTEND_URL"
+
+          {
+            echo "backend_url<<EOF"
+            echo "$BACKEND_URL"
+            echo "EOF"
+            echo "frontend_url<<EOF"
+            echo "$FRONTEND_URL"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+  ansible:
+    runs-on: self-hosted
+    needs: terraform
+    env:
+      BACKEND_URL: ${{ needs.terraform.outputs.backend_url }}
+      FRONTEND_URL: ${{ needs.terraform.outputs.frontend_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create virtual environment
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+
+      - name: Activate virtual environment
+        run: |
+          python3 --version
+
+      - name: Install ansible
+        run: |
+          pip install ansible
+
+      - name: Validate services
+        run:  |
+          ansible-playbook -i ansible/inventory/inventory.ini ansible/playbooks/validate.yaml \
+          -e backend_url=${BACKEND_URL} \
+          -e frontend_url=${FRONTEND_URL}

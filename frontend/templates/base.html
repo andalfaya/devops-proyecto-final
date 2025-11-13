@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or "Frontend App" }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 60%; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f2f2f2; }
+    input, button { margin: 0.5rem; padding: 0.4rem; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Frontend - Consulta de Usuarios</h1>
+  {% block content %}{% endblock %}
+</body>
+</html>
