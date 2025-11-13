@@ -1,13 +1,20 @@
-import psycopg2
+"""Pruebas de integración para inserción y selección en la base de datos."""
+
 import os
 from db import init_db, get_conn
 
 def test_db_insert_select():
-    os.environ["DATABASE_URL"] = "postgresql://postgres:postgres@localhost:5433/postgres"
+    """Verifica que se puede insertar y recuperar un usuario en la base de datos."""
+    os.environ["DATABASE_URL"] = (
+        "postgresql://postgres:postgres@localhost:5433/postgres"
+    )
     init_db()
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("INSERT INTO users (name, email) VALUES (%s, %s) RETURNING id;", ("test", "test@example.com"))
+    cur.execute(
+        "INSERT INTO users (name, email) VALUES (%s, %s) RETURNING id;",
+        ("test", "test@example.com")
+    )
     uid = cur.fetchone()[0]
     conn.commit()
 

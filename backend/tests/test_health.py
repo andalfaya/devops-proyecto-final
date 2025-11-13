@@ -1,6 +1,9 @@
+"""Prueba de endpoint de salud de la API."""
+
 from main import app
 
 def test_health():
+    """Verifica que /api/health responde correctamente."""
     client = app.test_client()
     res = client.get("/api/health")
     assert res.status_code == 200

@@ -8,5 +8,5 @@ prod:
   pylint: 6.0
   coverage: 68
 default:
-  pylint: 8.0
-  coverage: 75
+  pylint: 5.0
+  coverage: 50

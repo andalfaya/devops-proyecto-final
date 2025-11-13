@@ -1,3 +1,5 @@
+"""Pruebas para verificar la inicialización de la base de datos."""
+
 from db import init_db, get_conn
 
 def test_init_db_creates_table():
