@@ -146,7 +146,7 @@ jobs:
             echo "frontend_url<<EOF"
             echo "$FRONTEND_URL"
             echo "EOF"
-    } >> $GITHUB_OUTPUT
+          } >> $GITHUB_OUTPUT
 
 
   ansible:
