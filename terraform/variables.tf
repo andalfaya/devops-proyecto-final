@@ -1,16 +1,19 @@
 variable "env" {
   description = "Entorno de despliegue (dev, stg, prod)"
   type        = string
+  default     = ""
 }
 
 variable "backend_image" {
   description = "Imagen del backend (ej: ghcr.io/org/backend:tag)"
   type        = string
+  default     = ""
 }
 
 variable "frontend_image" {
   description = "Imagen del frontend (ej: ghcr.io/org/frontend:tag)"
   type        = string
+  default     = ""
 }
 
 variable "ports" {
