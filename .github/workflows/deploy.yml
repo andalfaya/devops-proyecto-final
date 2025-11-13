@@ -119,16 +119,19 @@ jobs:
       - name: Get Terraform 
         run: |
           echo "=== DEBUG BACKEND SERVICE ==="
-          terraform -chdir=terraform output -raw backend_url
+          terraform -chdir=terraform output -raw backend_port
 
           echo "=== DEBUG FRONTEND SERVICE ==="
-          terraform -chdir=terraform output -raw frontend_url
+          terraform -chdir=terraform output -raw frontend_port
 
       - name: Get Terraform outputs
         id: export
         run: |
-          BACKEND_URL=$(terraform -chdir=terraform output -raw backend_url | sed 's/::.*//')
-          FRONTEND_URL=$(terraform -chdir=terraform output -raw frontend_url | sed 's/::.*//')
+          BACKEND_PORT=$(terraform -chdir=terraform output -raw backend_port | sed 's/::.*//')
+          FRONTEND_PORT=$(terraform -chdir=terraform output -raw frontend_port | sed 's/::.*//')
+          NODE_IP=$(minikube ip)
+          BACKEND_URL="http://${NODE_IP}:${BACKEND_PORT}/health"
+          FRONTEND_URL="http://${NODE_IP}:${FRONTEND_PORT}/health"
 
           {
             echo "backend_url<<EOF"
