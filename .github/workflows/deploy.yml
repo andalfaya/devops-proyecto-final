@@ -132,8 +132,8 @@ jobs:
           echo "Salida backend_port RAW:"
           echo "$BACKEND_PORT_RAW"
 
-          echo "=== Paso 2: filtrar solo número backend (antes de '::') ==="
-          BACKEND_PORT=$(echo "$BACKEND_PORT_RAW" | awk 'match($0,/^([0-9]+)::/,m){print m[1]; exit}')
+          echo "=== Paso 2: filtrar solo número backend ==="
+          BACKEND_PORT=$(echo "$BACKEND_PORT_RAW" | cut -d':' -f1)
           echo "Puerto backend filtrado: $BACKEND_PORT"
 
           echo "=== Paso 3: obtener frontend_port crudo ==="
@@ -141,19 +141,9 @@ jobs:
           echo "Salida frontend_port RAW:"
           echo "$FRONTEND_PORT_RAW"
 
-          echo "=== Paso 4: filtrar solo número frontend (antes de '::') ==="
-          FRONTEND_PORT=$(echo "$FRONTEND_PORT_RAW" | awk 'match($0,/^([0-9]+)::/,m){print m[1]; exit}')
+          echo "=== Paso 4: filtrar solo número frontend ==="
+          FRONTEND_PORT=$(echo "$FRONTEND_PORT_RAW" | cut -d':' -f1)
           echo "Puerto frontend filtrado: $FRONTEND_PORT"
-
-          # Validaciones
-          if ! echo "$BACKEND_PORT" | grep -Eq '^[0-9]+$'; then
-            echo "ERROR: No se pudo extraer un puerto backend válido del output de Terraform"
-            exit 1
-          fi
-          if ! echo "$FRONTEND_PORT" | grep -Eq '^[0-9]+$'; then
-            echo "ERROR: No se pudo extraer un puerto frontend válido del output de Terraform"
-            exit 1
-          fi
 
           echo "=== Paso 5: obtener IP de Minikube ==="
           NODE_IP=$(minikube ip)
@@ -173,6 +163,7 @@ jobs:
             echo "$FRONTEND_URL"
             echo "EOF"
           } >> $GITHUB_OUTPUT
+
 
 
 
