@@ -138,13 +138,6 @@ jobs:
             echo "EOF"
           } >> $GITHUB_OUTPUT
 
-
-
-
-
-
-
-
   ansible:
     runs-on: self-hosted
     needs: terraform
