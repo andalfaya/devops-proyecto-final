@@ -119,6 +119,12 @@ jobs:
       - name: Get Terraform 
         run: |
           echo "=== DEBUG BACKEND SERVICE ==="
+          terraform -chdir=terraform output backend_port
+
+          echo "=== DEBUG FRONTEND SERVICE ==="
+          terraform -chdir=terraform output frontend_port
+          
+          echo "=== DEBUG BACKEND SERVICE ==="
           terraform -chdir=terraform output -raw backend_port
 
           echo "=== DEBUG FRONTEND SERVICE ==="
@@ -127,31 +133,23 @@ jobs:
       - name: Get Terraform outputs and compose URLs
         id: export
         run: |
-          echo "=== Paso 1: obtener backend_port crudo ==="
-          BACKEND_PORT_RAW=$(terraform -chdir=terraform output -raw backend_port 2>&1)
-          echo "Salida backend_port RAW:"
-          echo "$BACKEND_PORT_RAW"
-
-          echo "=== Paso 2: filtrar solo número backend ==="
-          BACKEND_PORT=$(echo "$BACKEND_PORT_RAW" | cut -d':' -f1)
+          echo "=== Backend port crudo ==="
+          terraform -chdir=terraform output -raw backend_port 2>&1 | tee backend_raw.txt
+          BACKEND_PORT=$(grep -Eo '^[0-9]+' backend_raw.txt | head -n1)
           echo "Puerto backend filtrado: $BACKEND_PORT"
 
-          echo "=== Paso 3: obtener frontend_port crudo ==="
-          FRONTEND_PORT_RAW=$(terraform -chdir=terraform output -raw frontend_port 2>&1)
-          echo "Salida frontend_port RAW:"
-          echo "$FRONTEND_PORT_RAW"
-
-          echo "=== Paso 4: filtrar solo número frontend ==="
-          FRONTEND_PORT=$(echo "$FRONTEND_PORT_RAW" | cut -d':' -f1)
+          echo "=== Frontend port crudo ==="
+          terraform -chdir=terraform output -raw frontend_port 2>&1 | tee frontend_raw.txt
+          FRONTEND_PORT=$(grep -Eo '^[0-9]+' frontend_raw.txt | head -n1)
           echo "Puerto frontend filtrado: $FRONTEND_PORT"
 
-          echo "=== Paso 5: obtener IP de Minikube ==="
+          echo "=== IP de Minikube ==="
           NODE_IP=$(minikube ip)
           echo "IP del nodo: $NODE_IP"
 
-          echo "=== Paso 6: componer URLs ==="
           BACKEND_URL="http://${NODE_IP}:${BACKEND_PORT}/health"
           FRONTEND_URL="http://${NODE_IP}:${FRONTEND_PORT}/health"
+
           echo "Backend URL: $BACKEND_URL"
           echo "Frontend URL: $FRONTEND_URL"
 
@@ -163,6 +161,7 @@ jobs:
             echo "$FRONTEND_URL"
             echo "EOF"
           } >> $GITHUB_OUTPUT
+
 
 
 
