@@ -1,9 +1,9 @@
 networks:
-  devops_net:
+  devops_net_dev:
     driver: bridge
 
 volumes:
-  pgdata:
+  pgdata_dev:
 
 services:
   postgres:
@@ -14,7 +14,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_dev:/var/lib/postgresql/data
       - ./init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init-multiple-dbs.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -23,7 +23,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - devops_net
+      - devops_net_dev
 
   backend:
     build: ./backend
@@ -36,7 +36,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - devops_net
+      - devops_net_dev
 
   frontend:
     build: ./frontend
@@ -49,4 +49,4 @@ services:
     depends_on:
       - backend
     networks:
-      - devops_net
+      - devops_net_dev
