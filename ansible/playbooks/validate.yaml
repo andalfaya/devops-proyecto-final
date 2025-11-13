@@ -1,11 +1,17 @@
-- hosts: local
+- hosts: localhost
   tasks:
-    - name: Check frontend health
-      uri:
-        url: "{{ frontend_url }}"
-        return_content: yes
-
     - name: Check backend health
-      uri:
-        url: "{{ backend_url }}"
-        return_content: yes
+      command: curl -s {{ backend_url }}
+      register: backend_health
+
+    - name: Show backend response
+      debug:
+        var: backend_health.stdout
+
+    - name: Check frontend health
+      command: curl -s {{ frontend_url }}
+      register: frontend_health
+
+    - name: Show frontend response
+      debug:
+        var: frontend_health.stdout
