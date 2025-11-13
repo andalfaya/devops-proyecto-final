@@ -39,13 +39,3 @@ resource "kubernetes_manifest" "postgres_service" {
     env = var.env
   }))
 }
-
-output "backend_url" {
-  description = "URL del backend accesible desde localhost"
-  value       = "http://localhost:${var.ports[var.env].backend_nodeport}/api/health"
-}
-
-output "frontend_url" {
-  description = "URL del frontend accesible desde localhost"
-  value       = "http://localhost:${var.ports[var.env].frontend_nodeport}/health"
-}
