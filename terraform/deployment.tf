@@ -20,7 +20,7 @@ resource "kubernetes_manifest" "frontend_deployment" {
 }
 
 resource "kubernetes_manifest" "frontend_service" {
-  manifest = yamldecode(templatefile("${path.module}/../k8s/fontend-service.yaml", {
+  manifest = yamldecode(templatefile("${path.module}/../k8s/frontend-service.yaml", {
     env               = var.env,
     frontend_nodeport = var.ports[var.env].frontend_nodeport
   }))
