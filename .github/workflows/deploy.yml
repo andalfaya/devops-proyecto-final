@@ -113,12 +113,25 @@ jobs:
             -var="backend_image=${IMAGE_BACKEND}" \
             -var="frontend_image=${IMAGE_FRONTEND}"
 
-      - name: Get Terraform outputs
+      - name: Get Terraform outputs (debug)
         run: |
-          BACKEND_URL=$(terraform -chdir=terraform output -json backend_url | jq -r .value)
-          FRONTEND_URL=$(terraform -chdir=terraform output -json frontend_url | jq -r .value)
+          echo "=== BACKEND_URL (raw) ==="
+          terraform -chdir=terraform output -raw backend_url
+
+          echo "=== FRONTEND_URL (raw) ==="
+          terraform -chdir=terraform output -raw frontend_url
+
+          # Ahora guardamos en variables
+          BACKEND_URL=$(terraform -chdir=terraform output -raw backend_url | grep -Eo '^http.*')
+          FRONTEND_URL=$(terraform -chdir=terraform output -raw frontend_url | grep -Eo '^http.*')
+
+          echo "=== BACKEND_URL (filtered) === $BACKEND_URL"
+          echo "=== FRONTEND_URL (filtered) === $FRONTEND_URL"
+
+          # Finalmente exportamos al entorno
           echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
           echo "FRONTEND_URL=$FRONTEND_URL" >> $GITHUB_ENV
+
 
 
   ansible:
