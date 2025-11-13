@@ -87,6 +87,13 @@ jobs:
       - name: Terraform Init
         run: terraform -chdir=terraform init
 
+      - name: Terraform Import existing resources
+        run: |
+          terraform -chdir=terraform import kubernetes_namespace.ns ${ENVIRONMENT} || true
+          terraform -chdir=terraform import kubernetes_manifest.backend_service ${ENVIRONMENT}/backend || true
+          terraform -chdir=terraform import kubernetes_manifest.frontend_service ${ENVIRONMENT}/frontend || true
+          terraform -chdir=terraform import kubernetes_manifest.postgres_service ${ENVIRONMENT}/postgres || true
+
       - name: Terraform Destroy
         run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"
 
