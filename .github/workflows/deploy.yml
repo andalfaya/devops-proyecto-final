@@ -78,9 +78,18 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
+        
+      - name: Terraform Init
+        run: terraform -chdir=terraform init
 
       - name: Terraform Destroy
-        run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"
+        run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"init
+
+      - name: Terraform Plan
+        run: terraform -chdir=terraform plan \
+          -var="env=${ENVIRONMENT}" \
+          -var="backend_image=${{ needs.build-and-push.outputs.backend_image }}" \
+          -var="frontend_image=${{ needs.build-and-push.outputs.frontend_image }}"
 
       - name: Terraform Apply
         run: terraform -chdir=terraform apply -auto-approve \
