@@ -10,6 +10,7 @@ on:
 
 jobs:
   check-origin:
+    name: Check PR Source Branch
     runs-on: ubuntu-latest
     steps:
       - name: Validate source branch
