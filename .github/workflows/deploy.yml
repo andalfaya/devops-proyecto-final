@@ -116,7 +116,7 @@ jobs:
             -var="backend_image=${IMAGE_BACKEND}:${IMAGE_TAG}" \
             -var="frontend_image=${IMAGE_FRONTEND}:${IMAGE_TAG}"
 
-      - name: Get Terraform outputs
+      - name: Get Terraform 
         id: export
         run: |
           echo "=== DEBUG BACKEND SERVICE ==="
