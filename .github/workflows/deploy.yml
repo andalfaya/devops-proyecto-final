@@ -1,0 +1,24 @@
+name: Deployment Workflow
+
+on:
+  push:
+    branches:
+      - dev     # despliegue automático a entorno de desarrollo (Minikube)
+      - stg     # despliegue automático a staging
+      - prod    # despliegue controlado a producción
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deployment Placeholder
+    needs: report
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/stg' || github.ref == 'refs/heads/prod'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Deployment Placeholder
+        run: |
+          echo "✅ Todos los checks pasaron en ${{ github.ref }}."
+          echo "Aquí se ejecutará Terraform + Ansible + Kubernetes (minikube) más adelante."

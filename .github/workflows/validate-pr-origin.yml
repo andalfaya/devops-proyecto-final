@@ -1,0 +1,36 @@
+name: Validate PR origin
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - stg
+      - prod
+
+jobs:
+  check-origin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate source branch
+        run: |
+          echo "Base branch: $GITHUB_BASE_REF"
+          echo "Source branch: $GITHUB_HEAD_REF"
+
+          declare -A rules
+          rules[dev]="feature_"
+          rules[stg]="dev"
+          rules[prod]="stg"
+
+          allowed="${rules[$GITHUB_BASE_REF]}"
+
+          if [[ -z "$allowed" ]]; then
+            echo "⚠️ No rule defined for base branch $GITHUB_BASE_REF"
+            exit 1
+          fi
+
+          if [[ "$GITHUB_HEAD_REF" != $allowed* ]]; then
+            echo "❌ Only branches starting with '$allowed' can merge into '$GITHUB_BASE_REF'"
+            exit 1
+          fi
+
+          echo "✅ Merge allowed: $GITHUB_HEAD_REF → $GITHUB_BASE_REF"

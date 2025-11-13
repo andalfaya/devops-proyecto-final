@@ -1,0 +1,12 @@
+dev:
+  pylint: 7.0
+  coverage: 65
+stg:
+  pylint: 8.0
+  coverage: 75
+prod:
+  pylint: 9.0
+  coverage: 85
+default:
+  pylint: 8.0
+  coverage: 75
