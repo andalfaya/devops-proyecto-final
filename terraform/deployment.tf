@@ -48,6 +48,6 @@ resource "null_resource" "port_forward" {
   ]
 
   provisioner "local-exec" {
-    command = "${path.module}/../scripts/port_forward.sh ${var.env} ${var.ports[var.env].backend_nodeport} ${var.ports[var.env].frontend_nodeport}"
+    command = "minikube tunnel"
   }
 }
