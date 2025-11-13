@@ -141,14 +141,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - name: Create virtual environment
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
 
-      - name: Install Ansible
-        run: pip install ansible
+      - name: Activate virtual environment
+        run: |
+          python3 --version
+      
+      # 3 - Install pylint
+      - name: Install pylint
+        run: |
+          pip install ansible
 
       - name: Validate services
-        run: ansible-playbook -i ansible/inventory/local.ini ansible/playbooks/validate.yml \
+        run:  |
+          ansible-playbook -i ansible/inventory/local.ini ansible/playbooks/validate.yml \
           --extra-vars "backend_url=${BACKEND_URL} frontend_url=${FRONTEND_URL}"
