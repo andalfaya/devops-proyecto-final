@@ -26,43 +26,46 @@ FRONT_REQUEST_LATENCY = Histogram(
 
 @app.route("/health")
 def health():
-    FRONT_REQUEST_COUNT.labels("GET", "/health", 200).inc()
-    return jsonify({"status": "ok"}), 200
+    with FRONT_REQUEST_LATENCY.labels("/health").time():
+        FRONT_REQUEST_COUNT.labels("GET", "/health", 200).inc()
+        return jsonify({"status": "ok"}), 200
 
 
 @app.route("/")
 def home():
     """Página principal que lista usuarios desde el backend."""
-    try:
-        res = requests.get(f"{BACKEND_URL}/api/users", timeout=3)
-        users = res.json() if res.status_code == 200 else []
-        FRONT_REQUEST_COUNT.labels("GET", "/", res.status_code).inc()
-        return render_template("users.html", users=users, backend_url=BACKEND_URL)
-    except requests.RequestException:
-        FRONT_REQUEST_COUNT.labels("GET", "/", 500).inc()
-        return render_template("users.html", users=[], error="Backend no disponible")
+    with FRONT_REQUEST_LATENCY.labels("/").time():
+        try:
+            res = requests.get(f"{BACKEND_URL}/api/users", timeout=3)
+            users = res.json() if res.status_code == 200 else []
+            FRONT_REQUEST_COUNT.labels("GET", "/", res.status_code).inc()
+            return render_template("users.html", users=users, backend_url=BACKEND_URL)
+        except requests.RequestException:
+            FRONT_REQUEST_COUNT.labels("GET", "/", 500).inc()
+            return render_template("users.html", users=[], error="Backend no disponible")
 
 
 @app.route("/add", methods=["POST"])
 def add_user():
     """Crea un nuevo usuario a través del backend."""
-    name = request.form.get("name")
-    email = request.form.get("email")
-    if not name or not email:
-        FRONT_REQUEST_COUNT.labels("POST", "/add", 400).inc()
+    with FRONT_REQUEST_LATENCY.labels("/add").time():
+        name = request.form.get("name")
+        email = request.form.get("email")
+        if not name or not email:
+            FRONT_REQUEST_COUNT.labels("POST", "/add", 400).inc()
+            return redirect(url_for("home"))
+
+        try:
+            res = requests.post(
+                f"{BACKEND_URL}/api/users",
+                json={"name": name, "email": email},
+                timeout=3
+            )
+            FRONT_REQUEST_COUNT.labels("POST", "/add", res.status_code).inc()
+        except requests.RequestException:
+            FRONT_REQUEST_COUNT.labels("POST", "/add", 500).inc()
+
         return redirect(url_for("home"))
-
-    try:
-        res = requests.post(
-            f"{BACKEND_URL}/api/users",
-            json={"name": name, "email": email},
-            timeout=3
-        )
-        FRONT_REQUEST_COUNT.labels("POST", "/add", res.status_code).inc()
-    except requests.RequestException:
-        FRONT_REQUEST_COUNT.labels("POST", "/add", 500).inc()
-
-    return redirect(url_for("home"))
 
 
 # Exponer métricas Prometheus
