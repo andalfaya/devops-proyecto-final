@@ -37,17 +37,3 @@ resource "kubernetes_manifest" "postgres_service" {
     env = var.env
   }))
 }
-
-# =====================================================
-# Port-forward automático para backend y frontend
-# =====================================================
-resource "null_resource" "port_forward" {
-  depends_on = [
-    kubernetes_manifest.backend_service,
-    kubernetes_manifest.frontend_service
-  ]
-
-  provisioner "local-exec" {
-    command = "minikube tunnel"
-  }
-}
