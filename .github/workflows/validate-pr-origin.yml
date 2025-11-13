@@ -6,6 +6,7 @@ on:
       - dev
       - stg
       - prod
+  workflow_dispatch:
 
 jobs:
   check-origin:
