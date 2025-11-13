@@ -91,16 +91,18 @@ jobs:
         run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"
 
       - name: Terraform Plan
-        run: terraform -chdir=terraform plan \
-          -var="env=${ENVIRONMENT}" \
-          -var="backend_image=${{ needs.build-and-push.outputs.backend_image }}" \
-          -var="frontend_image=${{ needs.build-and-push.outputs.frontend_image }}"
+        run: |
+          terraform -chdir=terraform plan \
+            -var="env=${ENVIRONMENT}" \
+            -var="backend_image=${{ needs.build-and-push.outputs.backend_image }}" \
+            -var="frontend_image=${{ needs.build-and-push.outputs.frontend_image }}"
 
       - name: Terraform Apply
-        run: terraform -chdir=terraform apply -auto-approve \
-          -var="env=${ENVIRONMENT}" \
-          -var="backend_image=${{ needs.build-and-push.outputs.backend_image }}" \
-          -var="frontend_image=${{ needs.build-and-push.outputs.frontend_image }}"
+        run: |
+          terraform -chdir=terraform apply -auto-approve \
+            -var="env=${ENVIRONMENT}" \
+            -var="backend_image=${{ needs.build-and-push.outputs.backend_image }}" \
+            -var="frontend_image=${{ needs.build-and-push.outputs.frontend_image }}"
 
       - name: Get Terraform outputs
         id: tf_outputs
