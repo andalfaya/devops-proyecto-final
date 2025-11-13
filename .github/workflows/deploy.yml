@@ -113,22 +113,21 @@ jobs:
             -var="backend_image=${IMAGE_BACKEND}" \
             -var="frontend_image=${IMAGE_FRONTEND}"
 
-      - name: Get Terraform outputs (debug)
+      - name: Get Terraform outputs
         run: |
-          echo "=== BACKEND_URL (raw) ==="
-          terraform -chdir=terraform output -raw backend_url
+          RAW_BACKEND=$(terraform -chdir=terraform output -raw backend_url)
+          RAW_FRONTEND=$(terraform -chdir=terraform output -raw frontend_url)
 
-          echo "=== FRONTEND_URL (raw) ==="
-          terraform -chdir=terraform output -raw frontend_url
+          echo "=== BACKEND_URL (raw) === $RAW_BACKEND"
+          echo "=== FRONTEND_URL (raw) === $RAW_FRONTEND"
 
-          # Ahora guardamos en variables
-          BACKEND_URL=$(terraform -chdir=terraform output -raw backend_url | grep -Eo '^http.*')
-          FRONTEND_URL=$(terraform -chdir=terraform output -raw frontend_url | grep -Eo '^http.*')
+          # Eliminar cualquier patrón ::...::... y todo lo que siga
+          BACKEND_URL=$(echo "$RAW_BACKEND" | sed 's/::.*//')
+          FRONTEND_URL=$(echo "$RAW_FRONTEND" | sed 's/::.*//')
 
-          echo "=== BACKEND_URL (filtered) === $BACKEND_URL"
-          echo "=== FRONTEND_URL (filtered) === $FRONTEND_URL"
+          echo "=== BACKEND_URL (clean) === $BACKEND_URL"
+          echo "=== FRONTEND_URL (clean) === $FRONTEND_URL"
 
-          # Finalmente exportamos al entorno
           echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
           echo "FRONTEND_URL=$FRONTEND_URL" >> $GITHUB_ENV
 
@@ -138,9 +137,10 @@ jobs:
     runs-on: self-hosted
     needs: terraform
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Install Ansible
-        run: sudo apt-get update && sudo apt-get install -y ansible
+        run: pip install ansible
       - name: Validate services
         run: ansible-playbook -i ansible/inventory/local.ini ansible/playbooks/validate.yml \
           --extra-vars "backend_url=${BACKEND_URL} frontend_url=${FRONTEND_URL}"
