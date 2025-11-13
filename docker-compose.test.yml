@@ -1,12 +1,12 @@
 networks:
-  devops_net:
+  devops_net_test:
     driver: bridge
 
 volumes:
-  pgdata:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_logs:
+  pgdata_test:
+  sonarqube_data_test:
+  sonarqube_extensions_test:
+  sonarqube_logs_test:
 
 services:
   postgres:
@@ -17,7 +17,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_test:/var/lib/postgresql/data
       - ./init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init-multiple-dbs.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -26,7 +26,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - devops_net
+      - devops_net_test
 
   backend:
     build: ./backend
@@ -39,7 +39,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - devops_net
+      - devops_net_test
 
   frontend:
     build: ./frontend
@@ -52,7 +52,7 @@ services:
     depends_on:
       - backend
     networks:
-      - devops_net
+      - devops_net_test
 
   sonarqube:
     image: sonarqube:latest
@@ -71,11 +71,11 @@ services:
     depends_on:
       - postgres
     volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_data_test:/opt/sonarqube/data
+      - sonarqube_extensions_test:/opt/sonarqube/extensions
+      - sonarqube_logs_test:/opt/sonarqube/logs
     networks:
-      - devops_net
+      - devops_net_test
     deploy:
       resources:
         limits:
@@ -90,4 +90,4 @@ services:
     container_name: trivy
     entrypoint: ["sleep", "infinity"]
     networks:
-      - devops_net
+      - devops_net_test

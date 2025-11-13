@@ -1,3 +1,5 @@
+"""Pruebas para el endpoint /api/users."""
+
 import pytest
 from main import app
 from db import get_conn, init_db

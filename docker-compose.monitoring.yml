@@ -1,6 +1,5 @@
 volumes:
-  pgdata:
-  grafana-data:
+  grafana-data_monitor:
 
 services:
   prometheus:
@@ -21,7 +20,7 @@ services:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
     volumes:
-      - grafana-data:/var/lib/grafana
+      - grafana-data_monitor:/var/lib/grafana
     ports:
       - "3000:3000"
     depends_on:

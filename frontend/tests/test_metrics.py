@@ -1,3 +1,5 @@
+"""Prueba de disponibilidad del endpoint /metrics."""
+
 from app import app
 
 def test_metrics_endpoint_available():

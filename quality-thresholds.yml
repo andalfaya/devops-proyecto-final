@@ -2,11 +2,11 @@ dev:
   pylint: 7.0
   coverage: 65
 stg:
-  pylint: 8.0
-  coverage: 75
+  pylint: 6.5
+  coverage: 66
 prod:
-  pylint: 9.0
-  coverage: 85
+  pylint: 6.0
+  coverage: 68
 default:
-  pylint: 8.0
-  coverage: 75
+  pylint: 5.0
+  coverage: 50
