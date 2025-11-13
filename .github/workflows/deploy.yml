@@ -119,6 +119,21 @@ jobs:
       - name: Get Terraform outputs
         id: export
         run: |
+          echo "=== DEBUG BACKEND SERVICE ==="
+          terraform -chdir=terraform output backend_service_debug
+
+          echo "=== DEBUG FRONTEND SERVICE ==="
+          terraform -chdir=terraform output frontend_service_debug
+
+          echo "=== BACKEND NODEPORT ==="
+          terraform -chdir=terraform output backend_nodeport
+
+          echo "=== FRONTEND NODEPORT ==="
+          terraform -chdir=terraform output frontend_nodeport
+
+      - name: Get Terraform outputs
+        id: export
+        run: |
           BACKEND_URL=$(terraform -chdir=terraform output -raw backend_url | sed 's/::.*//')
           FRONTEND_URL=$(terraform -chdir=terraform output -raw frontend_url | sed 's/::.*//')
 
