@@ -15,10 +15,10 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ${frontend_nodeport}
+          image: ${frontend_image}
           ports:
             - containerPort: 8080
-              hostPort: ${var.ports[var.env].frontend_nodeport}
+              hostPort: ${frontend_nodeport}
           env:
             - name: BACKEND_URL
               value: "http://backend.${env}.svc.cluster.local:8000"
