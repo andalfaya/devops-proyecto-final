@@ -117,7 +117,6 @@ jobs:
             -var="frontend_image=${IMAGE_FRONTEND}:${IMAGE_TAG}"
 
       - name: Get Terraform 
-        id: export
         run: |
           echo "=== DEBUG BACKEND SERVICE ==="
           terraform -chdir=terraform output backend_service_debug
