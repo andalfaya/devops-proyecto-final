@@ -1,0 +1,11 @@
+- hosts: local
+  tasks:
+    - name: Check frontend health
+      uri:
+        url: "{{ frontend_url }}"
+        return_content: yes
+
+    - name: Check backend health
+      uri:
+        url: "{{ backend_url }}"
+        return_content: yes

@@ -1,0 +1,16 @@
+- hosts: local
+  vars:
+    backend_image: "{{ backend_image }}"
+    frontend_image: "{{ frontend_image }}"
+  tasks:
+    - name: Build backend image
+      command: docker build -t {{ backend_image }} ./backend
+
+    - name: Build frontend image
+      command: docker build -t {{ frontend_image }} ./frontend
+
+    - name: Push backend image
+      command: docker push {{ backend_image }}
+
+    - name: Push frontend image
+      command: docker push {{ frontend_image }}
