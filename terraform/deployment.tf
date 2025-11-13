@@ -27,7 +27,9 @@ resource "kubernetes_manifest" "frontend_service" {
 }
 
 resource "kubernetes_manifest" "postgres_statefulset" {
-  manifest = yamldecode(file("${path.module}/../k8s/postgres-statefulset.yaml"))
+  manifest = yamldecode(templatefile("${path.module}/../k8s/postgres-statefulset.yaml", {
+    env = var.env
+  }))
 }
 
 resource "kubernetes_manifest" "postgres_service" {
