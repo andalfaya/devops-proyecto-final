@@ -24,6 +24,9 @@ jobs:
     outputs:
       backend_image: ${{ env.IMAGE_BACKEND }}:${{ env.IMAGE_TAG }}
       frontend_image: ${{ env.IMAGE_FRONTEND }}:${{ env.IMAGE_TAG }}
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
