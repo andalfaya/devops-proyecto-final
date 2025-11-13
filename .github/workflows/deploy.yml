@@ -122,8 +122,15 @@ jobs:
           BACKEND_URL=$(terraform -chdir=terraform output -raw backend_url | sed 's/::.*//')
           FRONTEND_URL=$(terraform -chdir=terraform output -raw frontend_url | sed 's/::.*//')
 
-          echo "backend_url=$BACKEND_URL" >> $GITHUB_OUTPUT
-          echo "frontend_url=$FRONTEND_URL" >> $GITHUB_OUTPUT
+          {
+            echo "backend_url<<EOF"
+            echo "$BACKEND_URL"
+            echo "EOF"
+            echo "frontend_url<<EOF"
+            echo "$FRONTEND_URL"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
 
   ansible:
     runs-on: self-hosted
@@ -137,7 +144,7 @@ jobs:
 
       - name: Install Ansible
         run: pip install ansible
-        
+
       - name: Validate services
         run: ansible-playbook -i ansible/inventory/local.ini ansible/playbooks/validate.yml \
           --extra-vars "backend_url=${BACKEND_URL} frontend_url=${FRONTEND_URL}"
