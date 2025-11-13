@@ -75,6 +75,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        
+      - name: Install Node.js
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nodejs npm
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -83,7 +88,7 @@ jobs:
         run: terraform -chdir=terraform init
 
       - name: Terraform Destroy
-        run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"init
+        run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"
 
       - name: Terraform Plan
         run: terraform -chdir=terraform plan \
