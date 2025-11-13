@@ -1,11 +1,13 @@
 """Pruebas para verificar métricas de salud expuestas por Prometheus."""
 
 from app import app
+import time
 
 def test_health_metrics():
     """Verifica que las métricas se actualizan tras acceder a /health."""
     client = app.test_client()
     client.get("/health")
+    time.sleep(0.1)  # da tiempo a Prometheus para registrar
 
     res = client.get("/metrics")
     body = res.data.decode("utf-8")

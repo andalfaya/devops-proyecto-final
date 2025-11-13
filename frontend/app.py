@@ -26,9 +26,10 @@ FRONT_REQUEST_LATENCY = Histogram(
 
 @app.route("/health")
 def health():
+    """Endpoint de salud."""
     with FRONT_REQUEST_LATENCY.labels("/health").time():
         FRONT_REQUEST_COUNT.labels("GET", "/health", 200).inc()
-        return jsonify({"status": "ok"}), 200
+        return jsonify({"status": "ok"})
 
 
 @app.route("/")
