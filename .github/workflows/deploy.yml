@@ -116,36 +116,12 @@ jobs:
             -var="backend_image=${IMAGE_BACKEND}:${IMAGE_TAG}" \
             -var="frontend_image=${IMAGE_FRONTEND}:${IMAGE_TAG}"
 
-      - name: Get Terraform 
-        run: |
-          echo "=== DEBUG BACKEND SERVICE ==="
-          terraform -chdir=terraform output backend_port
-
-          echo "=== DEBUG FRONTEND SERVICE ==="
-          terraform -chdir=terraform output frontend_port
-          
-          echo "=== DEBUG BACKEND SERVICE ==="
-          terraform -chdir=terraform output -raw backend_port
-
-          echo "=== DEBUG FRONTEND SERVICE ==="
-          terraform -chdir=terraform output -raw frontend_port
-
       - name: Get Terraform outputs and compose URLs
         id: export
         run: |
-          echo "=== Backend port crudo ==="
-          terraform -chdir=terraform output -raw backend_port 2>&1 | tee backend_raw.txt
-          BACKEND_PORT=$(grep -Eo '^[0-9]+' backend_raw.txt | head -n1)
-          echo "Puerto backend filtrado: $BACKEND_PORT"
-
-          echo "=== Frontend port crudo ==="
-          terraform -chdir=terraform output -raw frontend_port 2>&1 | tee frontend_raw.txt
-          FRONTEND_PORT=$(grep -Eo '^[0-9]+' frontend_raw.txt | head -n1)
-          echo "Puerto frontend filtrado: $FRONTEND_PORT"
-
-          echo "=== IP de Minikube ==="
+          BACKEND_PORT=$(terraform -chdir=terraform output -raw backend_port 2>&1 | grep -Eo '^[0-9]+' | head -n1)
+          FRONTEND_PORT=$(terraform -chdir=terraform output -raw frontend_port 2>&1 | grep -Eo '^[0-9]+' | head -n1)
           NODE_IP=$(minikube ip)
-          echo "IP del nodo: $NODE_IP"
 
           BACKEND_URL="http://${NODE_IP}:${BACKEND_PORT}/health"
           FRONTEND_URL="http://${NODE_IP}:${FRONTEND_PORT}/health"
