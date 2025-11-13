@@ -1,6 +1,7 @@
 resource "kubernetes_manifest" "backend_deployment" {
   manifest = yamldecode(templatefile("${path.module}/../k8s/backend-deployment.yaml", {
-    backend_image = var.backend_image
+    backend_image = var.backend_image,
+    env           = var.env
   }))
 }
 
@@ -13,11 +14,12 @@ resource "kubernetes_manifest" "backend_service" {
 
 resource "kubernetes_manifest" "frontend_deployment" {
   manifest = yamldecode(templatefile("${path.module}/../k8s/frontend-deployment.yaml", {
-    frontend_image = var.frontend_image
+    frontend_image = var.frontend_image,
+    env            = var.env
   }))
 }
 
-resource "kubernetes_manifest" "fontend_service" {
+resource "kubernetes_manifest" "frontend_service" {
   manifest = yamldecode(templatefile("${path.module}/../k8s/fontend-service.yaml", {
     env              = var.env,
     fontend_nodeport = var.ports[var.env].fontend_nodeport
