@@ -115,12 +115,10 @@ jobs:
 
       - name: Get Terraform outputs
         run: |
-          BACKEND_URL=$(terraform -chdir=terraform output -json backend_url | jq -r .value)
-          FRONTEND_URL=$(terraform -chdir=terraform output -json frontend_url | jq -r .value)
+          BACKEND_URL=$(terraform -chdir=terraform output -raw backend_url)
+          FRONTEND_URL=$(terraform -chdir=terraform output -raw frontend_url)
           echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
           echo "FRONTEND_URL=$FRONTEND_URL" >> $GITHUB_ENV
-
-
 
   ansible:
     runs-on: self-hosted
