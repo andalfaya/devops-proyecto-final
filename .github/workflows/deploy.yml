@@ -127,8 +127,8 @@ jobs:
       - name: Get Terraform outputs
         id: export
         run: |
-          BACKEND_PORT=$(terraform -chdir=terraform output -raw backend_port)
-          FRONTEND_PORT=$(terraform -chdir=terraform output -raw frontend_port)
+          BACKEND_PORT=$(terraform -chdir=terraform output -raw backend_port 2>/dev/null)
+          FRONTEND_PORT=$(terraform -chdir=terraform output -raw frontend_port 2>/dev/null)
           NODE_IP=$(minikube ip)
 
           BACKEND_URL="http://${NODE_IP}:${BACKEND_PORT}/health"
@@ -148,6 +148,7 @@ jobs:
             echo "$FRONTEND_URL"
             echo "EOF"
           } >> $GITHUB_OUTPUT
+
 
 
 
