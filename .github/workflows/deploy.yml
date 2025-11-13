@@ -127,9 +127,10 @@ jobs:
       - name: Get Terraform outputs
         id: export
         run: |
-          BACKEND_PORT=$(terraform -chdir=terraform output -raw backend_port | sed 's/::.*//')
-          FRONTEND_PORT=$(terraform -chdir=terraform output -raw frontend_port | sed 's/::.*//')
+          BACKEND_PORT=$(terraform -chdir=terraform output -raw backend_port)
+          FRONTEND_PORT=$(terraform -chdir=terraform output -raw frontend_port)
           NODE_IP=$(minikube ip)
+
           BACKEND_URL="http://${NODE_IP}:${BACKEND_PORT}/health"
           FRONTEND_URL="http://${NODE_IP}:${FRONTEND_PORT}/health"
 
@@ -147,6 +148,7 @@ jobs:
             echo "$FRONTEND_URL"
             echo "EOF"
           } >> $GITHUB_OUTPUT
+
 
 
   ansible:
