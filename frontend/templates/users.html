@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+  {% if error %}
+  <p class="error">{{ error }}</p>
+  {% endif %}
+
+  <form method="post" action="/add">
+    <input type="text" name="name" placeholder="Nombre" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <button type="submit">Agregar Usuario</button>
+  </form>
+
+  <h2>Usuarios Registrados</h2>
+  <table>
+    <tr><th>ID</th><th>Nombre</th><th>Email</th></tr>
+    {% for user in users %}
+      <tr><td>{{ user.id }}</td><td>{{ user.name }}</td><td>{{ user.email }}</td></tr>
+    {% endfor %}
+  </table>
+
+  <p><small>Backend: {{ backend_url }}</small></p>
+{% endblock %}
