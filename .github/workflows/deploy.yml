@@ -133,6 +133,12 @@ jobs:
           BACKEND_URL="http://${NODE_IP}:${BACKEND_PORT}/health"
           FRONTEND_URL="http://${NODE_IP}:${FRONTEND_PORT}/health"
 
+          echo "DEBUG → BACKEND_PORT=$BACKEND_PORT"
+          echo "DEBUG → FRONTEND_PORT=$FRONTEND_PORT"
+          echo "DEBUG → NODE_IP=$NODE_IP"
+          echo "DEBUG → BACKEND_URL=$BACKEND_URL"
+          echo "DEBUG → FRONTEND_URL=$FRONTEND_URL"
+
           {
             echo "backend_url<<EOF"
             echo "$BACKEND_URL"
@@ -140,7 +146,8 @@ jobs:
             echo "frontend_url<<EOF"
             echo "$FRONTEND_URL"
             echo "EOF"
-          } >> $GITHUB_OUTPUT
+    } >> $GITHUB_OUTPUT
+
 
   ansible:
     runs-on: self-hosted
