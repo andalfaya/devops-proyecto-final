@@ -89,10 +89,42 @@ jobs:
 
       - name: Terraform Import existing resources
         run: |
-          terraform -chdir=terraform import kubernetes_namespace.ns ${ENVIRONMENT} || true
-          terraform -chdir=terraform import kubernetes_manifest.backend_service ${ENVIRONMENT}/backend || true
-          terraform -chdir=terraform import kubernetes_manifest.frontend_service ${ENVIRONMENT}/frontend || true
-          terraform -chdir=terraform import kubernetes_manifest.postgres_service ${ENVIRONMENT}/postgres || true
+          # Importar el namespace
+          terraform -chdir=terraform import \
+            -var="env=${ENVIRONMENT}" \
+            -var="backend_image=${IMAGE_BACKEND}:${IMAGE_TAG}" \
+            -var="frontend_image=${IMAGE_FRONTEND}:${IMAGE_TAG}" \
+            kubernetes_namespace.ns ${ENVIRONMENT} || true
+
+          # Importar el Service backend
+          terraform -chdir=terraform import \
+            -var="env=${ENVIRONMENT}" \
+            kubernetes_manifest.backend_service "v1/Service/${ENVIRONMENT}/backend" || true
+
+          # Importar el Service frontend
+          terraform -chdir=terraform import \
+            -var="env=${ENVIRONMENT}" \
+            kubernetes_manifest.frontend_service "v1/Service/${ENVIRONMENT}/frontend" || true
+
+          # Importar el Service postgres
+          terraform -chdir=terraform import \
+            -var="env=${ENVIRONMENT}" \
+            kubernetes_manifest.postgres_service "v1/Service/${ENVIRONMENT}/postgres" || true
+
+          # Importar el Deployment backend
+          terraform -chdir=terraform import \
+            -var="env=${ENVIRONMENT}" \
+            kubernetes_manifest.backend_deployment "apps/v1/Deployment/${ENVIRONMENT}/backend" || true
+
+          # Importar el Deployment frontend
+          terraform -chdir=terraform import \
+            -var="env=${ENVIRONMENT}" \
+            kubernetes_manifest.frontend_deployment "apps/v1/Deployment/${ENVIRONMENT}/frontend" || true
+
+          # Importar el StatefulSet postgres
+          terraform -chdir=terraform import \
+            -var="env=${ENVIRONMENT}" \
+            kubernetes_manifest.postgres_statefulset "apps/v1/StatefulSet/${ENVIRONMENT}/postgres" || true
 
       - name: Terraform Destroy
         run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"
