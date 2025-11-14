@@ -4,7 +4,7 @@ metadata:
   name: backend
   namespace: ${env}
 spec:
-  replicas: 1
+  replicas: ${backend_replicas}
   selector:
     matchLabels:
       app: backend

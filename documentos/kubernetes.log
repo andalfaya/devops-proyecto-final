@@ -1,0 +1,789 @@
+===== Pods en namespace: dev =====
+NAME                             READY   STATUS    RESTARTS   AGE
+backend-8cf6894fc-ctc4j          1/1     Running   0          30m
+frontend-7c87cdd78b-jgvgx        1/1     Running   0          30m
+node-exporter-6759897888-vqtc2   1/1     Running   0          30m
+postgres-0                       1/1     Running   0          30m
+===== Pods en namespace: stg =====
+NAME                             READY   STATUS    RESTARTS   AGE
+backend-565db6467b-crj7v         1/1     Running   0          20m
+frontend-8fbf985d9-kj47s         1/1     Running   0          20m
+node-exporter-6759897888-k7llw   1/1     Running   0          20m
+postgres-0                       1/1     Running   0          20m
+===== Pods en namespace: prod =====
+NAME                             READY   STATUS    RESTARTS   AGE
+backend-777fc48dbf-x829c         1/1     Running   0          2m29s
+frontend-55f8bb68fd-r79qm        1/1     Running   0          2m28s
+node-exporter-6759897888-xklhh   1/1     Running   0          2m30s
+postgres-0                       1/1     Running   0          2m28s
+===== Descripción de pods en namespace: dev =====
+Name:             backend-8cf6894fc-ctc4j
+Namespace:        dev
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:11:59 +0100
+Labels:           app=backend
+                  pod-template-hash=8cf6894fc
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.129
+IPs:
+  IP:           10.244.0.129
+Controlled By:  ReplicaSet/backend-8cf6894fc
+Containers:
+  backend:
+    Container ID:   docker://ba0fa9fde83e869fc031299b55ee80a737c7ac5fd09dea3bb3aba0d9ca94b6d8
+    Image:          ghcr.io/andalfaya/backend:dev
+    Image ID:       docker-pullable://ghcr.io/andalfaya/backend@sha256:346787f8c241b0191e86ca8567911957840ce10aee10fa2826e30e469c7b0731
+    Port:           8000/TCP
+    Host Port:      8001/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:12:05 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      DATABASE_URL:  postgresql://myuser:mypassword@postgres.dev.svc.cluster.local:5432/mydb
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-g6zpl (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-g6zpl:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30m   default-scheduler  Successfully assigned dev/backend-8cf6894fc-ctc4j to minikube
+  Normal  Pulled     29m   kubelet            Container image "ghcr.io/andalfaya/backend:dev" already present on machine
+  Normal  Created    29m   kubelet            Created container: backend
+  Normal  Started    29m   kubelet            Started container backend
+
+
+Name:             frontend-7c87cdd78b-jgvgx
+Namespace:        dev
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:11:59 +0100
+Labels:           app=frontend
+                  pod-template-hash=7c87cdd78b
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.128
+IPs:
+  IP:           10.244.0.128
+Controlled By:  ReplicaSet/frontend-7c87cdd78b
+Containers:
+  frontend:
+    Container ID:   docker://e39fa51ea5bb40f529a39fab6da1a9227134871b1d93e892978d7dbadf3d30d8
+    Image:          ghcr.io/andalfaya/frontend:dev
+    Image ID:       docker-pullable://ghcr.io/andalfaya/frontend@sha256:f90082a2724fb0401b3237a8777cc642274560d0277bd62873fbc334cdd1e55e
+    Port:           8080/TCP
+    Host Port:      8081/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:12:05 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      BACKEND_URL:  http://backend.dev.svc.cluster.local:8000
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-phqf9 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-phqf9:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30m   default-scheduler  Successfully assigned dev/frontend-7c87cdd78b-jgvgx to minikube
+  Normal  Pulled     29m   kubelet            Container image "ghcr.io/andalfaya/frontend:dev" already present on machine
+  Normal  Created    29m   kubelet            Created container: frontend
+  Normal  Started    29m   kubelet            Started container frontend
+
+
+Name:             node-exporter-6759897888-vqtc2
+Namespace:        dev
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:11:59 +0100
+Labels:           app=node-exporter
+                  pod-template-hash=6759897888
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.130
+IPs:
+  IP:           10.244.0.130
+Controlled By:  ReplicaSet/node-exporter-6759897888
+Containers:
+  node-exporter:
+    Container ID:  docker://a30050d0d1f5f9430f6cb25bf36d66080af61005f0995b83242cb24838a0b7ab
+    Image:         prom/node-exporter:latest
+    Image ID:      docker-pullable://prom/node-exporter@sha256:3ac34ce007accad95afed72149e0d2b927b7e42fd1c866149b945b84737c62c3
+    Port:          9100/TCP (metrics)
+    Host Port:     0/TCP (metrics)
+    Args:
+      --web.listen-address=0.0.0.0:9100
+      --path.rootfs=/host
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:12:06 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      EXPORTER_PORT:  9100
+    Mounts:
+      /host from rootfs (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-5chbs (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  rootfs:
+    Type:          HostPath (bare host directory volume)
+    Path:          /
+    HostPathType:  
+  kube-api-access-5chbs:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30m   default-scheduler  Successfully assigned dev/node-exporter-6759897888-vqtc2 to minikube
+  Normal  Pulling    29m   kubelet            Pulling image "prom/node-exporter:latest"
+  Normal  Pulled     29m   kubelet            Successfully pulled image "prom/node-exporter:latest" in 1.586s (1.586s including waiting). Image size: 25693593 bytes.
+  Normal  Created    29m   kubelet            Created container: node-exporter
+  Normal  Started    29m   kubelet            Started container node-exporter
+
+
+Name:             postgres-0
+Namespace:        dev
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:11:59 +0100
+Labels:           app=postgres
+                  apps.kubernetes.io/pod-index=0
+                  controller-revision-hash=postgres-6b585ffc59
+                  statefulset.kubernetes.io/pod-name=postgres-0
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.127
+IPs:
+  IP:           10.244.0.127
+Controlled By:  StatefulSet/postgres
+Containers:
+  postgres:
+    Container ID:   docker://a1a13e967b99bbf761fe97a24f710de1b2e23d1df589c9fecbb01dc94cad6130
+    Image:          postgres:15
+    Image ID:       docker-pullable://postgres@sha256:822f8795764a670160640888508b2a68ea5c4b045012c2de17e1d0447bdbdc99
+    Port:           5432/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:12:03 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POSTGRES_DB:        mydb
+      POSTGRES_USER:      myuser
+      POSTGRES_PASSWORD:  mypassword
+    Mounts:
+      /var/lib/postgresql/data from postgres-data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-89g84 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  postgres-data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  postgres-data-postgres-0
+    ReadOnly:   false
+  kube-api-access-89g84:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age                From               Message
+  ----     ------            ----               ----               -------
+  Warning  FailedScheduling  30m (x4 over 30m)  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. not found
+  Normal   Scheduled         30m                default-scheduler  Successfully assigned dev/postgres-0 to minikube
+  Normal   Pulled            29m                kubelet            Container image "postgres:15" already present on machine
+  Normal   Created           29m                kubelet            Created container: postgres
+  Normal   Started           29m                kubelet            Started container postgres
+===== Descripción de pods en namespace: stg =====
+Name:             backend-565db6467b-crj7v
+Namespace:        stg
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:21:39 +0100
+Labels:           app=backend
+                  pod-template-hash=565db6467b
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.131
+IPs:
+  IP:           10.244.0.131
+Controlled By:  ReplicaSet/backend-565db6467b
+Containers:
+  backend:
+    Container ID:   docker://e0054611874865b7595caa27cba908a089389a0228ba0eb848f5d3c981fab042
+    Image:          ghcr.io/andalfaya/backend:stg
+    Image ID:       docker-pullable://ghcr.io/andalfaya/backend@sha256:05809ad0e7a4e0c38d4908f554f99797c7b59c65af91ff8e30caae748c417954
+    Port:           8000/TCP
+    Host Port:      8101/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:21:58 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      DATABASE_URL:  postgresql://myuser:mypassword@postgres.stg.svc.cluster.local:5432/mydb
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-kqnl5 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-kqnl5:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason       Age                    From               Message
+  ----     ------       ----                   ----               -------
+  Normal   Scheduled    20m                    default-scheduler  Successfully assigned stg/backend-565db6467b-crj7v to minikube
+  Normal   Pulling      20m                    kubelet            Pulling image "ghcr.io/andalfaya/backend:stg"
+  Normal   Pulled       20m                    kubelet            Successfully pulled image "ghcr.io/andalfaya/backend:stg" in 8.783s (15.115s including waiting). Image size: 175890833 bytes.
+  Normal   Created      20m                    kubelet            Created container: backend
+  Normal   Started      20m                    kubelet            Started container backend
+  Warning  FailedMount  5m37s (x3 over 5m41s)  kubelet            MountVolume.SetUp failed for volume "kube-api-access-kqnl5" : failed to sync configmap cache: timed out waiting for the condition
+
+
+Name:             frontend-8fbf985d9-kj47s
+Namespace:        stg
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:21:38 +0100
+Labels:           app=frontend
+                  pod-template-hash=8fbf985d9
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.132
+IPs:
+  IP:           10.244.0.132
+Controlled By:  ReplicaSet/frontend-8fbf985d9
+Containers:
+  frontend:
+    Container ID:   docker://aff1f1c5d8ecd0313b663a72821c48812850431c22d7ce1000e087a64e2ed61b
+    Image:          ghcr.io/andalfaya/frontend:stg
+    Image ID:       docker-pullable://ghcr.io/andalfaya/frontend@sha256:3f71333b59c0c7c11c277d419ffe876cc864ffe467bc663bd01e92f60929843a
+    Port:           8080/TCP
+    Host Port:      8181/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:21:50 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      BACKEND_URL:  http://backend.stg.svc.cluster.local:8000
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-qdzpq (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-qdzpq:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  20m   default-scheduler  Successfully assigned stg/frontend-8fbf985d9-kj47s to minikube
+  Normal  Pulling    20m   kubelet            Pulling image "ghcr.io/andalfaya/frontend:stg"
+  Normal  Pulled     20m   kubelet            Successfully pulled image "ghcr.io/andalfaya/frontend:stg" in 5.299s (6.535s including waiting). Image size: 147141759 bytes.
+  Normal  Created    20m   kubelet            Created container: frontend
+  Normal  Started    20m   kubelet            Started container frontend
+
+
+Name:             node-exporter-6759897888-k7llw
+Namespace:        stg
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:21:38 +0100
+Labels:           app=node-exporter
+                  pod-template-hash=6759897888
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.133
+IPs:
+  IP:           10.244.0.133
+Controlled By:  ReplicaSet/node-exporter-6759897888
+Containers:
+  node-exporter:
+    Container ID:  docker://f730a8c6527c8627c0d5e1c194e5dfc6a13ae93aa4e5cfd5c25365550d248941
+    Image:         prom/node-exporter:latest
+    Image ID:      docker-pullable://prom/node-exporter@sha256:3ac34ce007accad95afed72149e0d2b927b7e42fd1c866149b945b84737c62c3
+    Port:          9100/TCP (metrics)
+    Host Port:     0/TCP (metrics)
+    Args:
+      --web.listen-address=0.0.0.0:9100
+      --path.rootfs=/host
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:21:44 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      EXPORTER_PORT:  9100
+    Mounts:
+      /host from rootfs (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-n6m4s (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  rootfs:
+    Type:          HostPath (bare host directory volume)
+    Path:          /
+    HostPathType:  
+  kube-api-access-n6m4s:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason       Age                    From               Message
+  ----     ------       ----                   ----               -------
+  Normal   Scheduled    20m                    default-scheduler  Successfully assigned stg/node-exporter-6759897888-k7llw to minikube
+  Normal   Pulling      20m                    kubelet            Pulling image "prom/node-exporter:latest"
+  Normal   Pulled       20m                    kubelet            Successfully pulled image "prom/node-exporter:latest" in 1.542s (1.548s including waiting). Image size: 25693593 bytes.
+  Normal   Created      20m                    kubelet            Created container: node-exporter
+  Normal   Started      20m                    kubelet            Started container node-exporter
+  Warning  FailedMount  5m37s (x3 over 5m41s)  kubelet            MountVolume.SetUp failed for volume "kube-api-access-n6m4s" : failed to sync configmap cache: timed out waiting for the condition
+
+
+Name:             postgres-0
+Namespace:        stg
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:21:41 +0100
+Labels:           app=postgres
+                  apps.kubernetes.io/pod-index=0
+                  controller-revision-hash=postgres-6b585ffc59
+                  statefulset.kubernetes.io/pod-name=postgres-0
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.134
+IPs:
+  IP:           10.244.0.134
+Controlled By:  StatefulSet/postgres
+Containers:
+  postgres:
+    Container ID:   docker://c623a69e1fd5b30fa98ddc3776ab59c577415aa622c3ee3a855332d21742514f
+    Image:          postgres:15
+    Image ID:       docker-pullable://postgres@sha256:822f8795764a670160640888508b2a68ea5c4b045012c2de17e1d0447bdbdc99
+    Port:           5432/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:21:43 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POSTGRES_DB:        mydb
+      POSTGRES_USER:      myuser
+      POSTGRES_PASSWORD:  mypassword
+    Mounts:
+      /var/lib/postgresql/data from postgres-data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hvpzv (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  postgres-data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  postgres-data-postgres-0
+    ReadOnly:   false
+  kube-api-access-hvpzv:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age                From               Message
+  ----     ------            ----               ----               -------
+  Warning  FailedScheduling  20m (x5 over 20m)  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. not found
+  Normal   Scheduled         20m                default-scheduler  Successfully assigned stg/postgres-0 to minikube
+  Normal   Pulled            20m                kubelet            Container image "postgres:15" already present on machine
+  Normal   Created           20m                kubelet            Created container: postgres
+  Normal   Started           20m                kubelet            Started container postgres
+===== Descripción de pods en namespace: prod =====
+Name:             backend-777fc48dbf-x829c
+Namespace:        prod
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:39:32 +0100
+Labels:           app=backend
+                  pod-template-hash=777fc48dbf
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.135
+IPs:
+  IP:           10.244.0.135
+Controlled By:  ReplicaSet/backend-777fc48dbf
+Containers:
+  backend:
+    Container ID:   docker://fabf341b3026d931f59e7ca265719a74df9b2483a2c8b85f76d4566d069ffca2
+    Image:          ghcr.io/andalfaya/backend:latest
+    Image ID:       docker-pullable://ghcr.io/andalfaya/backend@sha256:ffc199dae21ecf57fa45f32eb891d3141ecafa7a979a1760398d46beef942fd9
+    Port:           8000/TCP
+    Host Port:      8201/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:39:49 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      DATABASE_URL:  postgresql://myuser:mypassword@postgres.prod.svc.cluster.local:5432/mydb
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-2g725 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-2g725:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m29s  default-scheduler  Successfully assigned prod/backend-777fc48dbf-x829c to minikube
+  Normal  Pulling    2m23s  kubelet            Pulling image "ghcr.io/andalfaya/backend:latest"
+  Normal  Pulled     2m13s  kubelet            Successfully pulled image "ghcr.io/andalfaya/backend:latest" in 9.089s (10.377s including waiting). Image size: 175890833 bytes.
+  Normal  Created    2m12s  kubelet            Created container: backend
+  Normal  Started    2m12s  kubelet            Started container backend
+
+
+Name:             frontend-55f8bb68fd-r79qm
+Namespace:        prod
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:39:33 +0100
+Labels:           app=frontend
+                  pod-template-hash=55f8bb68fd
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.137
+IPs:
+  IP:           10.244.0.137
+Controlled By:  ReplicaSet/frontend-55f8bb68fd
+Containers:
+  frontend:
+    Container ID:   docker://a5b6c89a28bc376480e9c863fc24dd09e04b07075a9d429d0fade4f9b174a1fc
+    Image:          ghcr.io/andalfaya/frontend:latest
+    Image ID:       docker-pullable://ghcr.io/andalfaya/frontend@sha256:a70ad974fbca72ac5fd8ebf56301a47eb7001109e7e54971eae8c6b56d72e466
+    Port:           8080/TCP
+    Host Port:      8281/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:39:53 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      BACKEND_URL:  http://backend.prod.svc.cluster.local:8000
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hstb9 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-hstb9:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m27s  default-scheduler  Successfully assigned prod/frontend-55f8bb68fd-r79qm to minikube
+  Normal  Pulling    2m23s  kubelet            Pulling image "ghcr.io/andalfaya/frontend:latest"
+  Normal  Pulled     2m9s   kubelet            Successfully pulled image "ghcr.io/andalfaya/frontend:latest" in 4.147s (13.876s including waiting). Image size: 147141759 bytes.
+  Normal  Created    2m9s   kubelet            Created container: frontend
+  Normal  Started    2m8s   kubelet            Started container frontend
+
+
+Name:             node-exporter-6759897888-xklhh
+Namespace:        prod
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:39:32 +0100
+Labels:           app=node-exporter
+                  pod-template-hash=6759897888
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.136
+IPs:
+  IP:           10.244.0.136
+Controlled By:  ReplicaSet/node-exporter-6759897888
+Containers:
+  node-exporter:
+    Container ID:  docker://b0638e02a5fce3eae07b895aac68974f44a9170d9484a61a7a9ae42005310d63
+    Image:         prom/node-exporter:latest
+    Image ID:      docker-pullable://prom/node-exporter@sha256:3ac34ce007accad95afed72149e0d2b927b7e42fd1c866149b945b84737c62c3
+    Port:          9100/TCP (metrics)
+    Host Port:     0/TCP (metrics)
+    Args:
+      --web.listen-address=0.0.0.0:9100
+      --path.rootfs=/host
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:39:40 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      EXPORTER_PORT:  9100
+    Mounts:
+      /host from rootfs (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-w4kgp (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  rootfs:
+    Type:          HostPath (bare host directory volume)
+    Path:          /
+    HostPathType:  
+  kube-api-access-w4kgp:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m29s  default-scheduler  Successfully assigned prod/node-exporter-6759897888-xklhh to minikube
+  Normal  Pulling    2m24s  kubelet            Pulling image "prom/node-exporter:latest"
+  Normal  Pulled     2m22s  kubelet            Successfully pulled image "prom/node-exporter:latest" in 1.818s (1.818s including waiting). Image size: 25693593 bytes.
+  Normal  Created    2m22s  kubelet            Created container: node-exporter
+  Normal  Started    2m21s  kubelet            Started container node-exporter
+
+
+Name:             postgres-0
+Namespace:        prod
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Nov 2025 00:39:34 +0100
+Labels:           app=postgres
+                  apps.kubernetes.io/pod-index=0
+                  controller-revision-hash=postgres-6b585ffc59
+                  statefulset.kubernetes.io/pod-name=postgres-0
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.138
+IPs:
+  IP:           10.244.0.138
+Controlled By:  StatefulSet/postgres
+Containers:
+  postgres:
+    Container ID:   docker://2ff0450597ce534b89f8702588b31c185cd057db815fbbe20093bec7b3ed11eb
+    Image:          postgres:15
+    Image ID:       docker-pullable://postgres@sha256:822f8795764a670160640888508b2a68ea5c4b045012c2de17e1d0447bdbdc99
+    Port:           5432/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 14 Nov 2025 00:39:39 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POSTGRES_DB:        mydb
+      POSTGRES_USER:      myuser
+      POSTGRES_PASSWORD:  mypassword
+    Mounts:
+      /var/lib/postgresql/data from postgres-data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-xh5j7 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  postgres-data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  postgres-data-postgres-0
+    ReadOnly:   false
+  kube-api-access-xh5j7:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age                    From               Message
+  ----     ------            ----                   ----               -------
+  Warning  FailedScheduling  2m27s (x3 over 2m28s)  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. not found
+  Normal   Scheduled         2m27s                  default-scheduler  Successfully assigned prod/postgres-0 to minikube
+  Normal   Pulled            2m23s                  kubelet            Container image "postgres:15" already present on machine
+  Normal   Created           2m23s                  kubelet            Created container: postgres
+  Normal   Started           2m21s                  kubelet            Started container postgres
+===== Métricas de pods en namespace: dev =====
+===== Métricas de pods en namespace: stg =====
+===== Métricas de pods en namespace: prod =====
+===== Logs del primer pod en namespace: dev =====
+[2025-11-13 23:12:09 +0000] [1] [INFO] Starting gunicorn 23.0.0
+[2025-11-13 23:12:09 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+[2025-11-13 23:12:09 +0000] [1] [INFO] Using worker: sync
+[2025-11-13 23:12:09 +0000] [7] [INFO] Booting worker with pid: 7
+[2025-11-13 23:12:09 +0000] [8] [INFO] Booting worker with pid: 8
+[DB] Inicialización completa
+[DB] Inicialización completa
+[2025-11-13 23:32:23 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:7)
+[2025-11-13 23:34:34 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:8)
+[2025-11-13 23:34:44 +0000] [1] [ERROR] Worker (pid:7) was sent SIGKILL! Perhaps out of memory?
+[2025-11-13 23:34:58 +0000] [9] [INFO] Booting worker with pid: 9
+[2025-11-13 23:35:10 +0000] [1] [ERROR] Worker (pid:8) was sent SIGKILL! Perhaps out of memory?
+[2025-11-13 23:35:10 +0000] [10] [INFO] Booting worker with pid: 10
+[DB] Inicialización completa[DB] Inicialización completa
+
+===== Logs del primer pod en namespace: stg =====
+[2025-11-13 23:22:01 +0000] [1] [INFO] Starting gunicorn 23.0.0
+[2025-11-13 23:22:01 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+[2025-11-13 23:22:01 +0000] [1] [INFO] Using worker: sync
+[2025-11-13 23:22:01 +0000] [7] [INFO] Booting worker with pid: 7
+[2025-11-13 23:22:01 +0000] [8] [INFO] Booting worker with pid: 8
+[DB] Inicialización completa
+[DB] Inicialización completa
+[2025-11-13 23:31:39 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:8)
+[2025-11-13 23:34:26 +0000] [1] [ERROR] Worker (pid:8) was sent SIGKILL! Perhaps out of memory?
+[2025-11-13 23:34:43 +0000] [9] [INFO] Booting worker with pid: 9
+[DB] Inicialización completa
+===== Logs del primer pod en namespace: prod =====
+[2025-11-13 23:39:50 +0000] [1] [INFO] Starting gunicorn 23.0.0
+[2025-11-13 23:39:50 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+[2025-11-13 23:39:50 +0000] [1] [INFO] Using worker: sync
+[2025-11-13 23:39:50 +0000] [7] [INFO] Booting worker with pid: 7
+[2025-11-13 23:39:50 +0000] [8] [INFO] Booting worker with pid: 8
+[DB] Inicialización completa
+[DB] Inicialización completa

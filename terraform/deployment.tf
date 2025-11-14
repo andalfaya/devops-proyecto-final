@@ -2,7 +2,8 @@ resource "kubernetes_manifest" "backend_deployment" {
   manifest = yamldecode(templatefile("${path.module}/../k8s/backend-deployment.yaml", {
     backend_image    = var.backend_image,
     env              = var.env,
-    backend_nodeport = var.ports[var.env].backend_nodeport
+    backend_nodeport = var.ports[var.env].backend_nodeport,
+    backend_replicas = var.replicas[var.env].backend_replicas
   }))
 }
 
@@ -17,7 +18,8 @@ resource "kubernetes_manifest" "frontend_deployment" {
   manifest = yamldecode(templatefile("${path.module}/../k8s/frontend-deployment.yaml", {
     frontend_image    = var.frontend_image,
     env               = var.env,
-    frontend_nodeport = var.ports[var.env].frontend_nodeport
+    frontend_nodeport = var.ports[var.env].frontend_nodeport,
+    frontend_replicas = var.replicas[var.env].frontend_replicas
   }))
 }
 
@@ -30,7 +32,8 @@ resource "kubernetes_manifest" "frontend_service" {
 
 resource "kubernetes_manifest" "postgres_statefulset" {
   manifest = yamldecode(templatefile("${path.module}/../k8s/postgres-statefulset.yaml", {
-    env = var.env
+    env               = var.env,
+    postgres_replicas = var.replicas[var.env].postgres_replicas
   }))
 }
 
@@ -42,7 +45,8 @@ resource "kubernetes_manifest" "postgres_service" {
 
 resource "kubernetes_manifest" "node_exporter_deployment" {
   manifest = yamldecode(templatefile("${path.module}/../k8s/node-exporter-deployment.yaml", {
-    env = var.env
+    env                    = var.env,
+    node_exporter_replicas = var.replicas[var.env].node_exporter_replicas
   }))
 }
 
