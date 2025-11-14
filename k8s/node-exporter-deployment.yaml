@@ -6,7 +6,7 @@ metadata:
   labels:
     app: node-exporter
 spec:
-  replicas: 1
+  replicas: ${node_exporter_replicas}
   selector:
     matchLabels:
       app: node-exporter

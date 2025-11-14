@@ -4,35 +4,35 @@ global:
 scrape_configs:
   - job_name: 'dev-node'
     static_configs:
-      - targets: ['192.168.49.2:8091']
+      - targets: ['192.168.49.2:8191']
 
   - job_name: 'dev-backend'
     static_configs:
-      - targets: ['192.168.49.2:8001']
+      - targets: ['192.168.49.2:8101']
 
   - job_name: 'dev-frontend'
     static_configs:
-      - targets: ['192.168.49.2:8081']
+      - targets: ['192.168.49.2:8181']
       
   - job_name: 'stg-node'
     static_configs:
-      - targets: ['192.168.49.2:8191']
+      - targets: ['192.168.49.2:8291']
 
   - job_name: 'stg-backend'
     static_configs:
-      - targets: ['192.168.49.2:8101']
+      - targets: ['192.168.49.2:8201']
 
   - job_name: 'stg-frontend'
     static_configs:
-      - targets: ['192.168.49.2:8181']
+      - targets: ['192.168.49.2:8281']
 
   - job_name: 'prod-node'
     static_configs:
-      - targets: ['192.168.49.2:8291']
+      - targets: ['192.168.49.2:8391']
   - job_name: 'prod-backend'
     static_configs:
-      - targets: ['192.168.49.2:8201']
+      - targets: ['192.168.49.2:8301']
   
   - job_name: 'prod-frontend'
     static_configs:
-      - targets: ['192.168.49.2:8281']
+      - targets: ['192.168.49.2:8381']
