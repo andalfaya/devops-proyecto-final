@@ -101,6 +101,10 @@ jobs:
 
       - name: Terraform Destroy
         run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"
+
+      - name: Cleanup servicios previos
+        run: |
+          kubectl delete svc backend frontend node-exporter postgres -n ${ENVIRONMENT} --ignore-not-found
         
       - name: Esperar liberación de puertos
         run: sleep 30
