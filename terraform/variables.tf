@@ -25,19 +25,49 @@ variable "ports" {
   }))
   default = {
     dev = {
-      backend_nodeport  = 8001
-      frontend_nodeport = 8081
-      nodeexporter_nodeport = 8091
-    }
-    stg = {
       backend_nodeport  = 8101
       frontend_nodeport = 8181
       nodeexporter_nodeport = 8191
     }
-    prod = {
+    stg = {
       backend_nodeport  = 8201
       frontend_nodeport = 8281
       nodeexporter_nodeport = 8291
+    }
+    prod = {
+      backend_nodeport  = 8301
+      frontend_nodeport = 8381
+      nodeexporter_nodeport = 8391
+    }
+  }
+}
+
+variable "replicas" {
+  description = "replicas por entorno"
+  type = map(object({
+    backend_replicas       = number
+    frontend_replicas      = number
+    postgres_replicas      = number
+    node_exporter_replicas = number
+  }))
+  default = {
+    dev = {
+      backend_replicas       = 1
+      frontend_replicas      = 1
+      postgres_replicas      = 1
+      node_exporter_replicas = 1
+    }
+    stg = {
+      backend_replicas       = 1
+      frontend_replicas      = 1
+      postgres_replicas      = 1
+      node_exporter_replicas = 1
+    }
+    prod = {
+      backend_replicas       = 1
+      frontend_replicas      = 1
+      postgres_replicas      = 1
+      node_exporter_replicas = 1
     }
   }
 }
