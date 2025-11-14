@@ -4,7 +4,7 @@ metadata:
   name: frontend
   namespace: ${env}
 spec:
-  replicas: 1
+  replicas: ${frontend_replicas}
   selector:
     matchLabels:
       app: frontend
