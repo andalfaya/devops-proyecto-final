@@ -101,6 +101,9 @@ jobs:
 
       - name: Terraform Destroy
         run: terraform -chdir=terraform destroy -auto-approve -var="env=${ENVIRONMENT}"
+        
+      - name: Esperar liberación de puertos
+        run: sleep 30
 
       - name: Terraform Plan
         run: |
